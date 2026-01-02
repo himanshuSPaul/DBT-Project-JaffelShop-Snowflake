@@ -1,1 +1,1 @@
-# DBT-Project-JaffelShop
+# DBT-Project-JaffelShop-Snowflake
