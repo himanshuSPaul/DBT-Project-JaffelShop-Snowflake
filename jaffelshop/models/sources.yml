@@ -1,0 +1,216 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw source tables from JAFFELSHOP_ECOM containing unprocessed transactional data
+    database: JAFFELSHOP_ECOM
+    schema: PUBLIC
+    config:
+      meta:
+        owner: "@alice"
+      freshness:
+        warn_after: {count: 12, period: hour}
+        error_after: {count: 24, period: hour}
+      loaded_at_field: null  # Snowflake timestamp tracking
+    
+    tables:
+      - name: raw_customers
+        description: Raw customer data source table from JAFFELSHOP_ECOM.PUBLIC.CUSTOMERS
+        identifier: CUSTOMERS
+        config:
+          tags:
+            - critical
+            - pii
+            - customer
+          meta:
+            contains_pii: true
+          freshness:
+            warn_after: {count: 1, period: hour}
+            error_after: {count: 5, period: hour}
+        columns:
+          - name: ID
+            description: Unique identifier for each customer
+            config:
+              meta: 
+                contains_pii: true
+            data_tests:
+              - not_null
+              - unique
+              
+          - name: NAME
+            description: Customer's full name
+            data_tests:
+              - not_null
+            
+
+
+      - name: raw_orders
+        description: Raw order transaction data from JAFFELSHOP_ECOM.PUBLIC.ORDERS
+        identifier: ORDERS
+        config:
+          enabled: true
+          tags:
+            - critical
+            - revenue
+            - orders
+          freshness:
+            warn_after: {count: 12, period: hour}
+            error_after: {count: 24, period: hour}
+          loaded_at_field: null
+        columns:
+          - name: id
+            description: Unique identifier for each order
+            data_tests:
+              - not_null
+              - unique
+          
+          - name: customer
+            description: Reference to customer who placed the order
+            data_tests:
+              - not_null
+          
+          - name: ordered_at
+            description: Timestamp when order was placed
+            data_tests:
+              - not_null
+          
+          - name: store_id
+            description: Store/location identifier where order was placed
+            data_tests:
+              - not_null
+          
+          - name: subtotal
+            description: Subtotal amount before tax
+            data_tests:
+              - not_null
+          
+          - name: tax_paid
+            description: Tax amount paid on the order
+            data_tests:
+              - not_null
+          
+          - name: order_total
+            description: Total amount including tax
+            data_tests:
+              - not_null
+
+      - name: raw_items
+        identifier: ITEMS
+        config:
+          tags:
+            - critical
+            - orders
+            - line-items
+          freshness:
+            warn_after: {count: 1, period: hour}
+            error_after: {count: 5, period: hour}
+          loaded_at_field: LAST_REFRESHED_AT
+        columns:
+          - name: id
+            description: Unique identifier for each line item
+            tests:
+              - not_null
+              - unique
+          
+          - name: order_id
+            description: Reference to the order this item belongs to
+            data_tests:
+              - not_null
+          
+          - name: sku
+            description: Stock keeping unit - unique product identifier
+            data_tests:
+              - not_null
+
+
+      - name: raw_products
+        identifier: PRODUCTS
+        config:
+          tags:
+            - high
+            - products
+            - catalog
+          freshness:
+            warn_after: {count: 12, period: hour}
+            error_after: {count: 24, period: hour}
+          loaded_at_query: "select CONVERT_TIMEZONE('UTC', MAX(LAST_REFRESHED_AT)::timestamp_ltz) AS max_loaded_at FROM  {{ this }} "
+           
+        columns:
+          - name: sku
+            description: Stock keeping unit - unique product code
+            data_tests:
+              - not_null
+              - unique
+          
+          - name: name
+            description: Display name of the product
+            data_tests:
+              - not_null
+          
+          - name: type
+            description: Category or type of product
+          
+          - name: price
+            description: List price of the product
+            data_tests:
+              - not_null
+          
+          - name: description
+            description: Product description
+            
+            
+      - name: raw_tweets
+        identifier: TWEETS
+        description: Raw tweets data from JAFFELSHOP_ECOM.PUBLIC.TWEETS
+        columns:
+          - name: id
+            description: Unique identifier for each tweet
+            data_tests:
+              - not_null
+              - unique
+          
+          - name: user_id
+            description: User who posted the tweet
+            data_tests:
+              - not_null
+          
+          - name: tweeted_at
+            description: Timestamp when tweet was posted
+            data_tests:
+              - not_null
+          
+          - name: content
+            description: Tweet content/text
+
+      - name: raw_supplies
+        identifier: SUPPLIES
+        description: Raw supplies data from JAFFELSHOP_ECOM.PUBLIC.SUPPLIES
+        config:
+          tags:
+            - supplies
+            - inventory
+          freshness:
+            warn_after: {count: 1, period: hour}
+            error_after: {count: 5, period: hour}
+          loaded_at_field:  "CONVERT_TIMEZONE('Asia/Kolkata', 'UTC', updated_at::timestamp_ntz)"
+        
+        columns:
+          - name: id
+            description: Unique identifier for each supply item
+            data_tests:
+              - not_null
+              - unique
+          
+          - name: name
+            description: Supply name
+            data_tests:
+              - not_null
+          
+          - name: cost
+            description: Cost of the supply item
+          
+          - name: perishable
+            description: Whether supply is perishable (boolean)
+          
+          - name: sku
+            description: Stock keeping unit for supply
