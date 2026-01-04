@@ -97,7 +97,7 @@ D:.
 Parent Folder        : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake
 Virtual Env          : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\dbt-sf-venv
 Activate Virtual Env : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\dbt-sf-venv\Scripts\activate.ps1
-DBT Project Path     : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\dbjaffelshop
+DBT Project Path     : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\jaffelshop
 
 ```
 
@@ -118,3 +118,27 @@ DBT Project Path     : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-Jaff
 
 ### 1.b Mart Stores Lineage
 ![Mart Stores Lineage Graph](assets/images/mart_orders-LineageGraph.png)
+
+
+### ** Step 1.b.1: Build stg_customers (Staging Customers)**
+:
+The CUSTOMERS raw table has names like "John Smith" but analytics needs them split into FIRST_NAME, LAST_NAME for better analysis. Also needs data quality checks.
+
+**File to Create**: `models/stg/stg_customers.sql`
+
+**Business Requirements**:
+1. **Source**: Read from `customers` source (which points to `PUBLIC.CUSTOMERS` table)
+2. **Transformations**:
+   - Keep `CUSTOMER_ID` (primary key)
+   - Rename `CUSTOMER_NAME` to  `CUSTOMER_NAME`
+   - Split name into `FIRST_NAME`, `MIDDLE_NAME`, `LAST_NAME` 
+   - Convert `CREATED_AT` to proper date format
+   - Add `IS_VALID_CUSTOMER` flag (TRUE if `ID` and `name` both present)
+3. **Quality Checks**:
+   - Remove rows with NULL CUSTOMER_ID
+   - ~~Only include customers created in 2024-2025~~
+4. **Output Columns**:
+   ```
+   CUSTOMER_ID, CUSTOMER_NAME, FIRST_NAME, MIDDLE_NAME, LAST_NAME, 
+   IS_VALID_CUSTOMER, CREATED_AT
+   ```
