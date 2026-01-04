@@ -100,3 +100,20 @@ Activate Virtual Env : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-Jaff
 DBT Project Path     : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\dbjaffelshop
 
 ```
+
+## Data Lineage Graphs
+
+### 1. Building Customers360 Deep Dive Dashboard  Lineage
+![Mart Customers Lineage Graph](assets/images/exposure_customers360DeepDive-LineageGraph.png)
+
+
+
+### 1.a Building Mart Customers Lineage
+![Mart Customers Lineage Graph](assets/images/mart_customers-LineageGraph.png)
+
+
+
+
+
+### 1.b Mart Stores Lineage
+![Mart Stores Lineage Graph](assets/images/mart_orders-LineageGraph.png)
