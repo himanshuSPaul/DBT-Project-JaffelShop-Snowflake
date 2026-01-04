@@ -5,24 +5,27 @@
 git clone https://github.com/himanshuSPaul/DBT-Project-JaffelShop-Snowflake.git
 
 
---
- git branch -a
+###### List All Branch
+``` git branch -a```
+
+###### Create New branch 
+```git checkout -b feature/initial-set-up origin/feature/initial-set-up ```
+
+###### Crate Virtual Env
+``` python -m venv dbt-sf-venv ```
+
+###### Activate Virtual Env
+``` .\dbt-sf-venv\Scripts\Activate.ps1 ```
+
+###### **Upgrade pip version**
+
+``` python.exe -m pip install --upgrade pip ```
+
+###### Install dbt package
+``` pip install dbt-snowflake=1.10.6, snowflake-connector-python==4.1.1 ```
 
 
--- git checkout -b feature/initial-set-up origin/feature/initial-set-up
-
---Crate Virtual Env
-python -m venv dbt-sf-venv
-
---Activate Virtual Env
-.\dbt-sf-venv\Scripts\Activate.ps1
-
---Upgrade pip version
-python.exe -m pip install --upgrade pip
-
---Install dbt package
-pip install dbt-snowflake=1.10.6, snowflake-connector-python==4.1.1
-
+###### Initiate DBT package
 ```
 (dbt-sf-venv) (dbt-sf-venv) D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake
 > dbt init
@@ -51,7 +54,7 @@ threads (1 or more) [1]: 4
 (dbt-sf-venv) (dbt-sf-venv) D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake
 >
 ```
-#### DBT Prject Directory Structure
+##### DBT Prject Directory Structure
 
 ```
 > tree /F
@@ -85,5 +88,15 @@ D:.
 │
 └───tests
         .gitkeep
+
+```
+
+
+## Folder Structure
+```
+Parent Folder        : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake
+Virtual Env          : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\dbt-sf-venv
+Activate Virtual Env : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\dbt-sf-venv\Scripts\activate.ps1
+DBT Project Path     : D:\Learning\VSCode\DBT\DBT-JaffelShop-SF\DBT-Project-JaffelShop-Snowflake\dbjaffelshop
 
 ```
